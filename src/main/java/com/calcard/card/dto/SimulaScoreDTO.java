@@ -1,6 +1,11 @@
 package com.calcard.card.dto;
 
 import com.calcard.card.model.Pessoa;
+import com.calcard.card.simulacao.ExecutaCalculo;
+import com.calcard.card.simulacao.rankingA;
+import com.calcard.card.simulacao.rankingB;
+import com.calcard.card.simulacao.rankingC;
+import com.calcard.card.simulacao.rankingD;
 import com.calcard.card.util.Metodos;
 
 public class SimulaScoreDTO {
@@ -10,7 +15,7 @@ public class SimulaScoreDTO {
     private int dependentes;
     private String renda;
     private int score;
-    private double resultado;
+    private String resultado;
 
     public SimulaScoreDTO(Pessoa pessoa) {
 	this.nome = pessoa.getNome();
@@ -19,6 +24,20 @@ public class SimulaScoreDTO {
 	this.dependentes = pessoa.getDependentes();
 	this.renda = Metodos.formataCurrency(pessoa.getRenda());
 	this.score = Metodos.escore();
+	double emprestimo = 0;
+	ExecutaCalculo calculo = new ExecutaCalculo();
+	if(this.score >=0 && this.score <= 200) {
+	    emprestimo = calculo.executa(pessoa, new rankingD());
+	}else if (this.score > 200 && this.score <= 400) {
+	    emprestimo = calculo.executa(pessoa, new rankingC());
+	}
+	else if (this.score > 400 && this.score <= 600) {
+	    emprestimo = calculo.executa(pessoa, new rankingB());
+	}
+	else if (this.score > 600) {
+	    emprestimo = calculo.executa(pessoa, new rankingA());
+	}
+	this.resultado = Metodos.formataCurrency(emprestimo);
     }
 
     public String getNome() {
@@ -45,7 +64,7 @@ public class SimulaScoreDTO {
 	return score;
     }
 
-    public double getResultado() {
+    public String getResultado() {
 	return resultado;
     }
 

@@ -1,6 +1,5 @@
 package com.calcard.card.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,12 +37,7 @@ public class PessoaController {
     @GetMapping(value = "/simulacao")
     public List<SimulaScoreDTO> simulacao() {
 	List<Pessoa> lista = repositorio.findAll();
-	List<SimulaScoreDTO> simulacao = new ArrayList<>();
-	lista.forEach(dados->{
-	    Pessoa pessoa = dados;
-	    SimulaScoreDTO score = new SimulaScoreDTO(pessoa);
-	    simulacao.add(score);
-	});
+	List<SimulaScoreDTO> simulacao = pessoaService.simulacao(lista);	
 	return simulacao;
     }
     
